@@ -416,6 +416,125 @@ h2 em { font-style: italic; color: var(--grey); }
 .edu-degree-sub { font-size: 0.92rem; font-style: italic; color: var(--grey); margin-bottom: 8px; }
 .edu-degree-detail { font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.04em; color: var(--grey); line-height: 1.6; }
 
+
+/* ── Terminal ── */
+.terminal-wrap {
+  margin-top: 32px;
+  border: 1px solid var(--rule);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.82rem;
+}
+
+.terminal-header {
+  background: var(--black);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.terminal-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.terminal-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #333;
+}
+
+.terminal-body {
+  background: #0E0E0C;
+  padding: 16px;
+  min-height: 100px;
+  max-height: 220px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.terminal-line {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #C8C8C0;
+}
+
+.t-grey { color: #555; }
+.t-green { color: #7CB87C; }
+.t-red { color: #C87C7C; }
+.t-white { color: #E8E8E0; }
+.t-dim { color: #888; }
+
+.terminal-input-row {
+  background: #0E0E0C;
+  border-top: 1px solid #222;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.terminal-prompt {
+  color: #7CB87C;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.terminal-mode {
+  background: #1A1A18;
+  border: 1px solid #333;
+  color: #888;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+  padding: 4px 8px;
+  flex-shrink: 0;
+  outline: none;
+  cursor: pointer;
+}
+
+.terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #E8E8E0;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.82rem;
+  caret-color: #7CB87C;
+}
+
+.terminal-input::placeholder { color: #444; }
+
+.terminal-run {
+  background: none;
+  border: 1px solid #333;
+  color: #7CB87C;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+  flex-shrink: 0;
+}
+
+.terminal-run:hover { background: #1A1A18; border-color: #7CB87C; }
+
 /* ── Animations ── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(14px); }
@@ -574,6 +693,13 @@ h2 em { font-style: italic; color: var(--grey); }
           </div>
           <span class="project-arrow">→</span>
         </div>
+        <div class="project-item" onclick="showProject('expeval')">
+          <div>
+            <div class="project-eyebrow">Data Structures · Cal Poly</div>
+            <div class="project-name">Expression Evaluator</div>
+          </div>
+          <span class="project-arrow">→</span>
+        </div>
       </div>
     </div>
 
@@ -696,6 +822,50 @@ h2 em { font-style: italic; color: var(--grey); }
         <a href="https://github.com/VincentRicigliano/concordance-tool" target="_blank" class="btn btn-ghost">GitHub</a>
       </div>
     </div>
+
+    <!-- Expression Evaluator detail -->
+    <div class="project-detail" id="proj-expeval">
+      <button class="back-btn" onclick="backToProjects()">← Projects</button>
+      <p class="page-eyebrow">Data Structures · Cal Poly CSC 202 · 2019</p>
+      <h2>Expression<br><em>Evaluator</em></h2>
+      <div class="proj-stats">
+        <div class="proj-stat"><div class="proj-stat-label">Language</div><div class="proj-stat-value">Python 3 · No dependencies</div></div>
+        <div class="proj-stat"><div class="proj-stat-label">Concepts</div><div class="proj-stat-value">Stack ADT · Shunting-Yard · Postfix</div></div>
+        <div class="proj-stat"><div class="proj-stat-label">Operations</div><div class="proj-stat-value">Infix · Prefix · Postfix</div></div>
+      </div>
+      <p class="proj-desc">A stack-based expression evaluation and conversion system built from scratch at Cal Poly. Implements three distinct algorithms for handling mathematical expressions in different notations, powered by a custom Stack data structure backed by a Python list.</p>
+      <ul class="proj-bullets">
+        <li>Built a Stack ADT from scratch with O(1) push, pop, peek, and size — used as the core data structure throughout</li>
+        <li>postfix_eval evaluates postfix expressions by pushing operands and applying operators on pop, supporting +, -, *, /, ** (exponent), and bit shifts &lt;&lt; and &gt;&gt;</li>
+        <li>infix_to_postfix converts standard math notation to postfix using the shunting-yard algorithm, correctly handling operator precedence and parentheses</li>
+        <li>prefix_to_postfix converts prefix (operator-first) notation to postfix by reversing the token list and using the stack to reconstruct the expression</li>
+        <li>Raises descriptive exceptions for invalid tokens, insufficient operands, division by zero, and illegal bit shift on floats</li>
+      </ul>
+      <div class="proj-links">
+        <a href="https://github.com/VincentRicigliano/expression-evaluator" target="_blank" class="btn btn-ghost">GitHub</a>
+      </div>
+
+      <div class="terminal-wrap">
+        <div class="terminal-header">
+          <span class="terminal-label">Try it — Expression Evaluator</span>
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="terminal-body" id="terminal-output">
+          <div class="terminal-line"><span class="t-grey">$ expression evaluator — enter a postfix, infix, or prefix expression</span></div>
+          <div class="terminal-line"><span class="t-grey">$ examples: "3 4 +" (postfix) · "3 + 4" (infix) · "+ 3 4" (prefix)</span></div>
+        </div>
+        <div class="terminal-input-row">
+          <span class="terminal-prompt">›</span>
+          <select class="terminal-mode" id="terminal-mode">
+            <option value="postfix">postfix eval</option>
+            <option value="infix">infix → postfix</option>
+            <option value="prefix">prefix → postfix</option>
+          </select>
+          <input class="terminal-input" id="terminal-input" type="text" placeholder="3 4 + 2 *" autocomplete="off" spellcheck="false">
+          <button class="terminal-run" onclick="runExpression()">run</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -804,7 +974,138 @@ h2 em { font-style: italic; color: var(--grey); }
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">
+// ── Expression Evaluator (JS port of Python logic) ──────────────────
+
+function tokenize(str) { return str.trim().split(/\s+/); }
+
+function isNumber(s) { return !isNaN(parseFloat(s)) && isFinite(s); }
+
+function applyOp(op, a, b) {
+  if (op === '+') return a + b;
+  if (op === '-') return a - b;
+  if (op === '*') return a * b;
+  if (op === '/') {
+    if (b === 0) throw new Error('Division by zero');
+    return a / b;
+  }
+  if (op === '**') return Math.pow(a, b);
+  if (op === '<<') {
+    if (!Number.isInteger(a) || !Number.isInteger(b)) throw new Error('Illegal bit shift operand');
+    return a << b;
+  }
+  if (op === '>>') {
+    if (!Number.isInteger(a) || !Number.isInteger(b)) throw new Error('Illegal bit shift operand');
+    return a >> b;
+  }
+  throw new Error('Invalid token: ' + op);
+}
+
+const PREC = { '<<': 1, '>>': 1, '+': 2, '-': 2, '*': 3, '/': 3, '**': 4 };
+const OPS = new Set(['+', '-', '*', '/', '**', '<<', '>>']);
+
+function postfixEval(str) {
+  const tokens = tokenize(str);
+  const stack = [];
+  for (const tok of tokens) {
+    if (isNumber(tok)) {
+      stack.push(parseFloat(tok));
+    } else if (OPS.has(tok)) {
+      if (stack.length < 2) throw new Error('Insufficient operands');
+      const b = stack.pop(), a = stack.pop();
+      stack.push(applyOp(tok, a, b));
+    } else {
+      throw new Error('Invalid token: ' + tok);
+    }
+  }
+  if (stack.length !== 1) throw new Error('Too many operands');
+  const result = stack[0];
+  return Number.isInteger(result) ? result.toString() : result.toFixed(6).replace(/\.?0+$/, '');
+}
+
+function infixToPostfix(str) {
+  const tokens = tokenize(str);
+  const out = [], stack = [];
+  for (const tok of tokens) {
+    if (isNumber(tok)) {
+      out.push(tok);
+    } else if (tok === '(') {
+      stack.push(tok);
+    } else if (tok === ')') {
+      while (stack.length && stack[stack.length-1] !== '(') out.push(stack.pop());
+      if (!stack.length) throw new Error('Mismatched parentheses');
+      stack.pop();
+    } else if (OPS.has(tok)) {
+      while (stack.length && stack[stack.length-1] !== '(' &&
+             PREC[stack[stack.length-1]] >= PREC[tok] && tok !== '**') {
+        out.push(stack.pop());
+      }
+      stack.push(tok);
+    } else {
+      throw new Error('Invalid token: ' + tok);
+    }
+  }
+  while (stack.length) {
+    if (stack[stack.length-1] === '(') throw new Error('Mismatched parentheses');
+    out.push(stack.pop());
+  }
+  return out.join(' ');
+}
+
+function prefixToPostfix(str) {
+  const tokens = tokenize(str).reverse();
+  const stack = [];
+  for (const tok of tokens) {
+    if (isNumber(tok)) {
+      stack.push(tok);
+    } else if (OPS.has(tok)) {
+      if (stack.length < 2) throw new Error('Insufficient operands');
+      const a = stack.pop(), b = stack.pop();
+      stack.push(a + ' ' + b + ' ' + tok);
+    } else {
+      throw new Error('Invalid token: ' + tok);
+    }
+  }
+  if (stack.length !== 1) throw new Error('Invalid prefix expression');
+  return stack[0];
+}
+
+function addTerminalLine(html) {
+  const body = document.getElementById('terminal-output');
+  const line = document.createElement('div');
+  line.className = 'terminal-line';
+  line.innerHTML = html;
+  body.appendChild(line);
+  body.scrollTop = body.scrollHeight;
+}
+
+function runExpression() {
+  const input = document.getElementById('terminal-input').value.trim();
+  const mode = document.getElementById('terminal-mode').value;
+  if (!input) return;
+
+  const modeLabel = { postfix: 'postfix eval', infix: 'infix → postfix', prefix: 'prefix → postfix' };
+  addTerminalLine('<span class="t-dim">[' + modeLabel[mode] + ']</span> <span class="t-white">' + input + '</span>');
+
+  try {
+    let result;
+    if (mode === 'postfix') result = postfixEval(input);
+    else if (mode === 'infix') result = infixToPostfix(input);
+    else result = prefixToPostfix(input);
+    addTerminalLine('<span class="t-green">→ ' + result + '</span>');
+  } catch(e) {
+    addTerminalLine('<span class="t-red">✗ ' + e.message + '</span>');
+  }
+
+  document.getElementById('terminal-input').value = '';
+}
+
+document.addEventListener('keydown', function(e) {
+  const inp = document.getElementById('terminal-input');
+  if (inp && document.activeElement === inp && e.key === 'Enter') runExpression();
+});
+
+</script><script>
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
@@ -826,6 +1127,137 @@ function backToProjects() {
   document.getElementById('projects-list').style.display = 'block';
   window.scrollTo(0, 0);
 }
+
+// ── Expression Evaluator (JS port of Python logic) ──────────────────
+
+function tokenize(str) { return str.trim().split(/\s+/); }
+
+function isNumber(s) { return !isNaN(parseFloat(s)) && isFinite(s); }
+
+function applyOp(op, a, b) {
+  if (op === '+') return a + b;
+  if (op === '-') return a - b;
+  if (op === '*') return a * b;
+  if (op === '/') {
+    if (b === 0) throw new Error('Division by zero');
+    return a / b;
+  }
+  if (op === '**') return Math.pow(a, b);
+  if (op === '<<') {
+    if (!Number.isInteger(a) || !Number.isInteger(b)) throw new Error('Illegal bit shift operand');
+    return a << b;
+  }
+  if (op === '>>') {
+    if (!Number.isInteger(a) || !Number.isInteger(b)) throw new Error('Illegal bit shift operand');
+    return a >> b;
+  }
+  throw new Error('Invalid token: ' + op);
+}
+
+const PREC = { '<<': 1, '>>': 1, '+': 2, '-': 2, '*': 3, '/': 3, '**': 4 };
+const OPS = new Set(['+', '-', '*', '/', '**', '<<', '>>']);
+
+function postfixEval(str) {
+  const tokens = tokenize(str);
+  const stack = [];
+  for (const tok of tokens) {
+    if (isNumber(tok)) {
+      stack.push(parseFloat(tok));
+    } else if (OPS.has(tok)) {
+      if (stack.length < 2) throw new Error('Insufficient operands');
+      const b = stack.pop(), a = stack.pop();
+      stack.push(applyOp(tok, a, b));
+    } else {
+      throw new Error('Invalid token: ' + tok);
+    }
+  }
+  if (stack.length !== 1) throw new Error('Too many operands');
+  const result = stack[0];
+  return Number.isInteger(result) ? result.toString() : result.toFixed(6).replace(/\.?0+$/, '');
+}
+
+function infixToPostfix(str) {
+  const tokens = tokenize(str);
+  const out = [], stack = [];
+  for (const tok of tokens) {
+    if (isNumber(tok)) {
+      out.push(tok);
+    } else if (tok === '(') {
+      stack.push(tok);
+    } else if (tok === ')') {
+      while (stack.length && stack[stack.length-1] !== '(') out.push(stack.pop());
+      if (!stack.length) throw new Error('Mismatched parentheses');
+      stack.pop();
+    } else if (OPS.has(tok)) {
+      while (stack.length && stack[stack.length-1] !== '(' &&
+             PREC[stack[stack.length-1]] >= PREC[tok] && tok !== '**') {
+        out.push(stack.pop());
+      }
+      stack.push(tok);
+    } else {
+      throw new Error('Invalid token: ' + tok);
+    }
+  }
+  while (stack.length) {
+    if (stack[stack.length-1] === '(') throw new Error('Mismatched parentheses');
+    out.push(stack.pop());
+  }
+  return out.join(' ');
+}
+
+function prefixToPostfix(str) {
+  const tokens = tokenize(str).reverse();
+  const stack = [];
+  for (const tok of tokens) {
+    if (isNumber(tok)) {
+      stack.push(tok);
+    } else if (OPS.has(tok)) {
+      if (stack.length < 2) throw new Error('Insufficient operands');
+      const a = stack.pop(), b = stack.pop();
+      stack.push(a + ' ' + b + ' ' + tok);
+    } else {
+      throw new Error('Invalid token: ' + tok);
+    }
+  }
+  if (stack.length !== 1) throw new Error('Invalid prefix expression');
+  return stack[0];
+}
+
+function addTerminalLine(html) {
+  const body = document.getElementById('terminal-output');
+  const line = document.createElement('div');
+  line.className = 'terminal-line';
+  line.innerHTML = html;
+  body.appendChild(line);
+  body.scrollTop = body.scrollHeight;
+}
+
+function runExpression() {
+  const input = document.getElementById('terminal-input').value.trim();
+  const mode = document.getElementById('terminal-mode').value;
+  if (!input) return;
+
+  const modeLabel = { postfix: 'postfix eval', infix: 'infix → postfix', prefix: 'prefix → postfix' };
+  addTerminalLine('<span class="t-dim">[' + modeLabel[mode] + ']</span> <span class="t-white">' + input + '</span>');
+
+  try {
+    let result;
+    if (mode === 'postfix') result = postfixEval(input);
+    else if (mode === 'infix') result = infixToPostfix(input);
+    else result = prefixToPostfix(input);
+    addTerminalLine('<span class="t-green">→ ' + result + '</span>');
+  } catch(e) {
+    addTerminalLine('<span class="t-red">✗ ' + e.message + '</span>');
+  }
+
+  document.getElementById('terminal-input').value = '';
+}
+
+document.addEventListener('keydown', function(e) {
+  const inp = document.getElementById('terminal-input');
+  if (inp && document.activeElement === inp && e.key === 'Enter') runExpression();
+});
+
 </script><script>
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
