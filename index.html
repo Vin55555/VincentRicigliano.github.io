@@ -700,6 +700,13 @@ h2 em { font-style: italic; color: var(--grey); }
           </div>
           <span class="project-arrow">→</span>
         </div>
+        <div class="project-item" onclick="showProject('huffman')">
+          <div>
+            <div class="project-eyebrow">Data Structures · Cal Poly</div>
+            <div class="project-name">Huffman Encoding</div>
+          </div>
+          <span class="project-arrow">→</span>
+        </div>
       </div>
     </div>
 
@@ -867,6 +874,41 @@ h2 em { font-style: italic; color: var(--grey); }
       </div>
     </div>
   </div>
+
+    <!-- Huffman detail -->
+    <div class="project-detail" id="proj-huffman">
+      <button class="back-btn" onclick="backToProjects()">← Projects</button>
+      <p class="page-eyebrow">Data Structures · Cal Poly CSC 202 · 2019</p>
+      <h2>Huffman<br><em>Encoding</em></h2>
+      <div class="proj-stats">
+        <div class="proj-stat"><div class="proj-stat-label">Language</div><div class="proj-stat-value">Python 3 · No dependencies</div></div>
+        <div class="proj-stat"><div class="proj-stat-label">Concepts</div><div class="proj-stat-value">Binary Trees · Greedy Algorithm · Compression</div></div>
+        <div class="proj-stat"><div class="proj-stat-label">Pipeline</div><div class="proj-stat-value">Encode + Decode · Full roundtrip</div></div>
+      </div>
+      <p class="proj-desc">A from-scratch implementation of Huffman coding — a lossless data compression algorithm — built at Cal Poly as part of CSC 202. Frequent characters get short binary codes, rare characters get long ones, reducing total file size. Includes a full encode and decode pipeline.</p>
+      <ul class="proj-bullets">
+        <li>cnt_freq reads any text file and counts the frequency of all 256 possible ASCII characters</li>
+        <li>create_huff_tree builds a binary tree bottom-up using a greedy algorithm: repeatedly combines the two lowest-frequency nodes into a parent until one root remains</li>
+        <li>create_code recursively traverses the tree, assigning binary codes: left branch adds 0, right branch adds 1 — frequent characters get the shortest paths</li>
+        <li>huffman_encode writes a compressed output file with a frequency header and the full binary-coded text</li>
+        <li>huffman_decode reads the header to reconstruct the tree, then walks it bit by bit to recover the original text exactly</li>
+      </ul>
+
+      <div class="terminal-wrap">
+        <div class="terminal-header">
+          <span class="terminal-label">Try it — Huffman Encoding</span>
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="terminal-body" id="huffman-output">
+          <div class="terminal-line"><span class="t-grey">$ enter any text to see its Huffman codes and compression ratio</span></div>
+        </div>
+        <div class="terminal-input-row">
+          <span class="terminal-prompt">›</span>
+          <input class="terminal-input" id="huffman-input" type="text" placeholder="hello world" autocomplete="off" spellcheck="false">
+          <button class="terminal-run" onclick="runHuffman()">encode</button>
+        </div>
+      </div>
+
 </div>
 
 <!-- ═══════════════════════════ EDUCATION ═══════════════════════════ -->
@@ -970,142 +1012,12 @@ h2 em { font-style: italic; color: var(--grey); }
       <div class="contact-item"><div class="contact-label">LinkedIn</div><a href="https://www.linkedin.com/in/vincentricigliano/" target="_blank" class="contact-value">vincentricigliano</a></div>
       <div class="contact-item"><div class="contact-label">GitHub</div><a href="https://github.com/VincentRicigliano" target="_blank" class="contact-value">VincentRicigliano</a></div>
       <div class="contact-item"><div class="contact-label">Phone</div><a href="tel:8056748421" class="contact-value">805.674.8421</a></div>
-    </div>
-  </div>
+    </div>  </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">
-// ── Expression Evaluator (JS port of Python logic) ──────────────────
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 
-function tokenize(str) { return str.trim().split(/\s+/); }
-
-function isNumber(s) { return !isNaN(parseFloat(s)) && isFinite(s); }
-
-function applyOp(op, a, b) {
-  if (op === '+') return a + b;
-  if (op === '-') return a - b;
-  if (op === '*') return a * b;
-  if (op === '/') {
-    if (b === 0) throw new Error('Division by zero');
-    return a / b;
-  }
-  if (op === '**') return Math.pow(a, b);
-  if (op === '<<') {
-    if (!Number.isInteger(a) || !Number.isInteger(b)) throw new Error('Illegal bit shift operand');
-    return a << b;
-  }
-  if (op === '>>') {
-    if (!Number.isInteger(a) || !Number.isInteger(b)) throw new Error('Illegal bit shift operand');
-    return a >> b;
-  }
-  throw new Error('Invalid token: ' + op);
-}
-
-const PREC = { '<<': 1, '>>': 1, '+': 2, '-': 2, '*': 3, '/': 3, '**': 4 };
-const OPS = new Set(['+', '-', '*', '/', '**', '<<', '>>']);
-
-function postfixEval(str) {
-  const tokens = tokenize(str);
-  const stack = [];
-  for (const tok of tokens) {
-    if (isNumber(tok)) {
-      stack.push(parseFloat(tok));
-    } else if (OPS.has(tok)) {
-      if (stack.length < 2) throw new Error('Insufficient operands');
-      const b = stack.pop(), a = stack.pop();
-      stack.push(applyOp(tok, a, b));
-    } else {
-      throw new Error('Invalid token: ' + tok);
-    }
-  }
-  if (stack.length !== 1) throw new Error('Too many operands');
-  const result = stack[0];
-  return Number.isInteger(result) ? result.toString() : result.toFixed(6).replace(/\.?0+$/, '');
-}
-
-function infixToPostfix(str) {
-  const tokens = tokenize(str);
-  const out = [], stack = [];
-  for (const tok of tokens) {
-    if (isNumber(tok)) {
-      out.push(tok);
-    } else if (tok === '(') {
-      stack.push(tok);
-    } else if (tok === ')') {
-      while (stack.length && stack[stack.length-1] !== '(') out.push(stack.pop());
-      if (!stack.length) throw new Error('Mismatched parentheses');
-      stack.pop();
-    } else if (OPS.has(tok)) {
-      while (stack.length && stack[stack.length-1] !== '(' &&
-             PREC[stack[stack.length-1]] >= PREC[tok] && tok !== '**') {
-        out.push(stack.pop());
-      }
-      stack.push(tok);
-    } else {
-      throw new Error('Invalid token: ' + tok);
-    }
-  }
-  while (stack.length) {
-    if (stack[stack.length-1] === '(') throw new Error('Mismatched parentheses');
-    out.push(stack.pop());
-  }
-  return out.join(' ');
-}
-
-function prefixToPostfix(str) {
-  const tokens = tokenize(str).reverse();
-  const stack = [];
-  for (const tok of tokens) {
-    if (isNumber(tok)) {
-      stack.push(tok);
-    } else if (OPS.has(tok)) {
-      if (stack.length < 2) throw new Error('Insufficient operands');
-      const a = stack.pop(), b = stack.pop();
-      stack.push(a + ' ' + b + ' ' + tok);
-    } else {
-      throw new Error('Invalid token: ' + tok);
-    }
-  }
-  if (stack.length !== 1) throw new Error('Invalid prefix expression');
-  return stack[0];
-}
-
-function addTerminalLine(html) {
-  const body = document.getElementById('terminal-output');
-  const line = document.createElement('div');
-  line.className = 'terminal-line';
-  line.innerHTML = html;
-  body.appendChild(line);
-  body.scrollTop = body.scrollHeight;
-}
-
-function runExpression() {
-  const input = document.getElementById('terminal-input').value.trim();
-  const mode = document.getElementById('terminal-mode').value;
-  if (!input) return;
-
-  const modeLabel = { postfix: 'postfix eval', infix: 'infix → postfix', prefix: 'prefix → postfix' };
-  addTerminalLine('<span class="t-dim">[' + modeLabel[mode] + ']</span> <span class="t-white">' + input + '</span>');
-
-  try {
-    let result;
-    if (mode === 'postfix') result = postfixEval(input);
-    else if (mode === 'infix') result = infixToPostfix(input);
-    else result = prefixToPostfix(input);
-    addTerminalLine('<span class="t-green">→ ' + result + '</span>');
-  } catch(e) {
-    addTerminalLine('<span class="t-red">✗ ' + e.message + '</span>');
-  }
-
-  document.getElementById('terminal-input').value = '';
-}
-
-document.addEventListener('keydown', function(e) {
-  const inp = document.getElementById('terminal-input');
-  if (inp && document.activeElement === inp && e.key === 'Enter') runExpression();
-});
-
-</script><script>
+<script>
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
@@ -1114,157 +1026,173 @@ function showPage(name) {
   if (pl) pl.style.display = 'block';
   window.scrollTo(0, 0);
 }
-
 function showProject(id) {
   document.getElementById('projects-list').style.display = 'none';
   document.querySelectorAll('.project-detail').forEach(p => p.classList.remove('active'));
   document.getElementById('proj-' + id).classList.add('active');
   window.scrollTo(0, 0);
 }
-
 function backToProjects() {
   document.querySelectorAll('.project-detail').forEach(p => p.classList.remove('active'));
   document.getElementById('projects-list').style.display = 'block';
   window.scrollTo(0, 0);
 }
-
-// ── Expression Evaluator (JS port of Python logic) ──────────────────
-
 function tokenize(str) { return str.trim().split(/\s+/); }
-
 function isNumber(s) { return !isNaN(parseFloat(s)) && isFinite(s); }
-
 function applyOp(op, a, b) {
   if (op === '+') return a + b;
   if (op === '-') return a - b;
   if (op === '*') return a * b;
-  if (op === '/') {
-    if (b === 0) throw new Error('Division by zero');
-    return a / b;
-  }
+  if (op === '/') { if (b === 0) throw new Error('Division by zero'); return a / b; }
   if (op === '**') return Math.pow(a, b);
-  if (op === '<<') {
-    if (!Number.isInteger(a) || !Number.isInteger(b)) throw new Error('Illegal bit shift operand');
-    return a << b;
-  }
-  if (op === '>>') {
-    if (!Number.isInteger(a) || !Number.isInteger(b)) throw new Error('Illegal bit shift operand');
-    return a >> b;
-  }
+  if (op === '<<') { if (!Number.isInteger(a)||!Number.isInteger(b)) throw new Error('Illegal bit shift operand'); return a << b; }
+  if (op === '>>') { if (!Number.isInteger(a)||!Number.isInteger(b)) throw new Error('Illegal bit shift operand'); return a >> b; }
   throw new Error('Invalid token: ' + op);
 }
-
-const PREC = { '<<': 1, '>>': 1, '+': 2, '-': 2, '*': 3, '/': 3, '**': 4 };
-const OPS = new Set(['+', '-', '*', '/', '**', '<<', '>>']);
-
+var PREC = { '<<': 1, '>>': 1, '+': 2, '-': 2, '*': 3, '/': 3, '**': 4 };
+var OPS = new Set(['+', '-', '*', '/', '**', '<<', '>>']);
 function postfixEval(str) {
-  const tokens = tokenize(str);
-  const stack = [];
-  for (const tok of tokens) {
-    if (isNumber(tok)) {
-      stack.push(parseFloat(tok));
-    } else if (OPS.has(tok)) {
+  var tokens = tokenize(str), stack = [];
+  for (var i = 0; i < tokens.length; i++) {
+    var tok = tokens[i];
+    if (isNumber(tok)) { stack.push(parseFloat(tok)); }
+    else if (OPS.has(tok)) {
       if (stack.length < 2) throw new Error('Insufficient operands');
-      const b = stack.pop(), a = stack.pop();
+      var b = stack.pop(), a = stack.pop();
       stack.push(applyOp(tok, a, b));
-    } else {
-      throw new Error('Invalid token: ' + tok);
-    }
+    } else { throw new Error('Invalid token: ' + tok); }
   }
   if (stack.length !== 1) throw new Error('Too many operands');
-  const result = stack[0];
-  return Number.isInteger(result) ? result.toString() : result.toFixed(6).replace(/\.?0+$/, '');
+  var r = stack[0];
+  return Number.isInteger(r) ? r.toString() : r.toFixed(6).replace(/\.?0+$/, '');
 }
-
 function infixToPostfix(str) {
-  const tokens = tokenize(str);
-  const out = [], stack = [];
-  for (const tok of tokens) {
-    if (isNumber(tok)) {
-      out.push(tok);
-    } else if (tok === '(') {
-      stack.push(tok);
-    } else if (tok === ')') {
+  var tokens = tokenize(str), out = [], stack = [];
+  for (var i = 0; i < tokens.length; i++) {
+    var tok = tokens[i];
+    if (isNumber(tok)) { out.push(tok); }
+    else if (tok === '(') { stack.push(tok); }
+    else if (tok === ')') {
       while (stack.length && stack[stack.length-1] !== '(') out.push(stack.pop());
       if (!stack.length) throw new Error('Mismatched parentheses');
       stack.pop();
     } else if (OPS.has(tok)) {
-      while (stack.length && stack[stack.length-1] !== '(' &&
-             PREC[stack[stack.length-1]] >= PREC[tok] && tok !== '**') {
-        out.push(stack.pop());
-      }
+      while (stack.length && stack[stack.length-1] !== '(' && PREC[stack[stack.length-1]] >= PREC[tok] && tok !== '**') out.push(stack.pop());
       stack.push(tok);
-    } else {
-      throw new Error('Invalid token: ' + tok);
-    }
+    } else { throw new Error('Invalid token: ' + tok); }
   }
-  while (stack.length) {
-    if (stack[stack.length-1] === '(') throw new Error('Mismatched parentheses');
-    out.push(stack.pop());
-  }
+  while (stack.length) { if (stack[stack.length-1] === '(') throw new Error('Mismatched parentheses'); out.push(stack.pop()); }
   return out.join(' ');
 }
-
 function prefixToPostfix(str) {
-  const tokens = tokenize(str).reverse();
-  const stack = [];
-  for (const tok of tokens) {
-    if (isNumber(tok)) {
-      stack.push(tok);
-    } else if (OPS.has(tok)) {
+  var tokens = tokenize(str).reverse(), stack = [];
+  for (var i = 0; i < tokens.length; i++) {
+    var tok = tokens[i];
+    if (isNumber(tok)) { stack.push(tok); }
+    else if (OPS.has(tok)) {
       if (stack.length < 2) throw new Error('Insufficient operands');
-      const a = stack.pop(), b = stack.pop();
+      var a = stack.pop(), b = stack.pop();
       stack.push(a + ' ' + b + ' ' + tok);
-    } else {
-      throw new Error('Invalid token: ' + tok);
-    }
+    } else { throw new Error('Invalid token: ' + tok); }
   }
   if (stack.length !== 1) throw new Error('Invalid prefix expression');
   return stack[0];
 }
-
 function addTerminalLine(html) {
-  const body = document.getElementById('terminal-output');
-  const line = document.createElement('div');
+  var body = document.getElementById('terminal-output');
+  if (!body) return;
+  var line = document.createElement('div');
   line.className = 'terminal-line';
   line.innerHTML = html;
   body.appendChild(line);
   body.scrollTop = body.scrollHeight;
 }
-
 function runExpression() {
-  const input = document.getElementById('terminal-input').value.trim();
-  const mode = document.getElementById('terminal-mode').value;
-  if (!input) return;
-
-  const modeLabel = { postfix: 'postfix eval', infix: 'infix → postfix', prefix: 'prefix → postfix' };
-  addTerminalLine('<span class="t-dim">[' + modeLabel[mode] + ']</span> <span class="t-white">' + input + '</span>');
-
+  var input = document.getElementById('terminal-input');
+  var modeEl = document.getElementById('terminal-mode');
+  if (!input || !modeEl) return;
+  var text = input.value.trim(), mode = modeEl.value;
+  if (!text) return;
+  var labels = { postfix: 'postfix eval', infix: 'infix to postfix', prefix: 'prefix to postfix' };
+  addTerminalLine('<span class="t-dim">[' + labels[mode] + ']</span> <span class="t-white">' + text + '</span>');
   try {
-    let result;
-    if (mode === 'postfix') result = postfixEval(input);
-    else if (mode === 'infix') result = infixToPostfix(input);
-    else result = prefixToPostfix(input);
-    addTerminalLine('<span class="t-green">→ ' + result + '</span>');
-  } catch(e) {
-    addTerminalLine('<span class="t-red">✗ ' + e.message + '</span>');
+    var result;
+    if (mode === 'postfix') result = postfixEval(text);
+    else if (mode === 'infix') result = infixToPostfix(text);
+    else result = prefixToPostfix(text);
+    addTerminalLine('<span class="t-green">&#8594; ' + result + '</span>');
+  } catch(e) { addTerminalLine('<span class="t-red">&#x2717; ' + e.message + '</span>'); }
+  input.value = '';
+}
+function huffmanEncode(text) {
+  if (!text) return null;
+  var freq = {}, i, ch;
+  for (i = 0; i < text.length; i++) { ch = text[i]; freq[ch] = (freq[ch] || 0) + 1; }
+  var nodes = Object.keys(freq).map(function(c) { return { ch: c, freq: freq[c], left: null, right: null }; });
+  nodes.sort(function(a, b) { return a.freq - b.freq || a.ch.charCodeAt(0) - b.ch.charCodeAt(0); });
+  if (nodes.length === 1) {
+    var c0 = {}; c0[nodes[0].ch] = '0';
+    return { codes: c0, originalBits: text.length * 8, encodedBits: text.length };
   }
-
-  document.getElementById('terminal-input').value = '';
+  while (nodes.length > 1) {
+    var a = nodes.shift(), b = nodes.shift();
+    var parent = { ch: a.ch < b.ch ? a.ch : b.ch, freq: a.freq + b.freq, left: a, right: b };
+    var ins = false;
+    for (var j = 0; j < nodes.length; j++) {
+      if (parent.freq < nodes[j].freq || (parent.freq === nodes[j].freq && parent.ch < nodes[j].ch)) {
+        nodes.splice(j, 0, parent); ins = true; break;
+      }
+    }
+    if (!ins) nodes.push(parent);
+  }
+  var codes = {};
+  function traverse(node, code) {
+    if (!node.left && !node.right) { codes[node.ch] = code; return; }
+    if (node.left) traverse(node.left, code + '0');
+    if (node.right) traverse(node.right, code + '1');
+  }
+  traverse(nodes[0], '');
+  var orig = text.length * 8, enc = 0;
+  for (i = 0; i < text.length; i++) enc += codes[text[i]].length;
+  return { codes: codes, originalBits: orig, encodedBits: enc };
 }
-
+function addHuffmanLine(html) {
+  var body = document.getElementById('huffman-output');
+  if (!body) return;
+  var line = document.createElement('div');
+  line.className = 'terminal-line';
+  line.innerHTML = html;
+  body.appendChild(line);
+  body.scrollTop = body.scrollHeight;
+}
+function runHuffman() {
+  var input = document.getElementById('huffman-input');
+  if (!input) return;
+  var text = input.value;
+  if (!text.trim()) return;
+  addHuffmanLine('<span class="t-dim">input: </span><span class="t-white">' + text + '</span>');
+  var result = huffmanEncode(text);
+  if (!result) return;
+  var ratio = ((1 - result.encodedBits / result.originalBits) * 100).toFixed(1);
+  addHuffmanLine('<span class="t-dim">original: </span><span class="t-white">' + result.originalBits + ' bits</span>');
+  addHuffmanLine('<span class="t-dim">encoded:  </span><span class="t-green">' + result.encodedBits + ' bits</span>');
+  addHuffmanLine('<span class="t-dim">savings:  </span><span class="t-green">' + ratio + '% compression</span>');
+  addHuffmanLine('<span class="t-dim">codes:</span>');
+  var sorted = Object.keys(result.codes).sort(function(a, b) { return result.codes[a].length - result.codes[b].length; });
+  for (var i = 0; i < sorted.length; i++) {
+    var c = sorted[i];
+    var lbl = c === ' ' ? 'space' : c;
+    addHuffmanLine('  <span class="t-dim">' + lbl + '</span> <span class="t-white">&#8594;</span> <span class="t-green">' + result.codes[c] + '</span>');
+  }
+  addHuffmanLine('');
+  input.value = '';
+}
 document.addEventListener('keydown', function(e) {
-  const inp = document.getElementById('terminal-input');
+  var inp = document.getElementById('terminal-input');
   if (inp && document.activeElement === inp && e.key === 'Enter') runExpression();
+  var hinp = document.getElementById('huffman-input');
+  if (hinp && document.activeElement === hinp && e.key === 'Enter') runHuffman();
 });
-
-</script><script>
-function showPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  window.scrollTo(0, 0);
-}
-
-function showProject(id) {
-  document.getElementById('projects-list').style.display = 'none';
-  document.querySelectorAll('.project-detail').forEach(p => p.classL
+</script>
+</body>
+</html>
